@@ -24,4 +24,4 @@
 
 ### Releases
 
-* [Relógio de Ponto v1.0.0.0](https://github.com/gustavocelani/relogio_de_ponto/blob/master/release/Rel%C3%B3gio%20de%20Ponto.exe)
+* [Relógio de Ponto v1.0.0.0](https://github.com/gustavocelani/relogio_de_ponto/raw/master/release/Rel%C3%B3gio%20de%20Ponto.exe)
