@@ -22,6 +22,6 @@
 +-------+---------+--------+-------+-------+--------+-------------------------------+
 ```
 
-### Release
+### Latest Release
 
-* [Relógio de Ponto (latest)](https://github.com/gustavocelani/relogio_de_ponto/raw/master/release/Rel%C3%B3gio%20de%20Ponto.exe)
+* [Download](https://github.com/gustavocelani/relogio_de_ponto/raw/master/release/Rel%C3%B3gio%20de%20Ponto.exe)
