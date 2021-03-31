@@ -14,7 +14,7 @@ import java.util.Date;
  *
  * +-------+---------+--------+-------+-------+--------+-------------------------------+
  * |   #   | Chegada | Almoço | Volta | Saída | Tempo  |             Ação              |
- * | Caso  |  (e1)   |  (s1)  | (e2)  | (s2)  | (hour) |   ( Calcular saída para: )    |
+ * | Caso  |  (e1)   |  (s1)  | (e2)  | (s3)  | (hour) |   ( Calcular saída para: )    |
  * +-------+---------+--------+-------+-------+--------+-------------------------------+
  * |   1   |    1    |   0    |   0   |   0   |   0    | 1h de almoço e 8h de trabalho |
  * |   2   |    1    |   0    |   0   |   0   |   1    | 1h de almoço e Xh de trabalho |
@@ -32,7 +32,7 @@ public class CasesController {
     private static final int INDEX_E1   = 0;
     private static final int INDEX_S1   = 1;
     private static final int INDEX_E2   = 2;
-    private static final int INDEX_S2   = 3;
+    private static final int INDEX_S3   = 3;
     private static final int INDEX_HOUR = 4;
 
     /**
@@ -41,7 +41,7 @@ public class CasesController {
     private static final int BITMASK_E1   = 0b10000;
     private static final int BITMASK_S1   = 0b01000;
     private static final int BITMASK_E2   = 0b00100;
-    private static final int BITMASK_S2   = 0b00000; // Ignored
+    private static final int BITMASK_S3   = 0b00000; // Ignored
     private static final int BITMASK_HOUR = 0b00001;
 
     /**
@@ -70,21 +70,21 @@ public class CasesController {
      * @param e1Spinner   Entrada 1 (Entrada)
      * @param s1Spinner   Saída   1 (Almoço)
      * @param e2Spinner   Entrada 2 (Volta)
-     * @param s2Spinner   Saída   2 (Saída)
+     * @param s3Spinner   Saída   3 (Saída)
      * @param hourSpinner Tempo
      */
     public void calc(
             JSpinner e1Spinner,
             JSpinner s1Spinner,
             JSpinner e2Spinner,
-            JSpinner s2Spinner,
+            JSpinner s3Spinner,
             JSpinner hourSpinner) {
 
         ArrayList<JSpinner> spinners = new ArrayList<>(Arrays.asList(
                 e1Spinner,
                 s1Spinner,
                 e2Spinner,
-                s2Spinner,
+                s3Spinner,
                 hourSpinner));
 
         ArrayList<Date> dates = spinnerArrayToDate(spinners);
@@ -126,7 +126,7 @@ public class CasesController {
      *
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   #   | Chegada | Almoço | Volta | Saída | Tempo  |             Ação              |
-     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s2)  | (hour) |   ( Calcular saída para: )    |
+     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s3)  | (hour) |   ( Calcular saída para: )    |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   1   |    1    |   0    |   0   |   0   |   0    | 1h de almoço e 8h de trabalho |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
@@ -134,22 +134,22 @@ public class CasesController {
     private void case1(ArrayList<Date> dates, ArrayList<JSpinner> spinners) {
         JSpinner s1Spinner   = spinners.get(INDEX_S1);
         JSpinner e2Spinner   = spinners.get(INDEX_E2);
-        JSpinner s2Spinner   = spinners.get(INDEX_S2);
+        JSpinner s3Spinner   = spinners.get(INDEX_S3);
         JSpinner hourSpinner = spinners.get(INDEX_HOUR);
 
         Date e1Date = dates.get(INDEX_E1);
 
         Date s1Date = Date.from(e1Date.toInstant().plus(Duration.ofHours(4)));
         Date e2Date = Date.from(s1Date.toInstant().plus(Duration.ofHours(1)));
-        Date s2Date = Date.from(e2Date.toInstant().plus(Duration.ofHours(4)));
+        Date s3Date = Date.from(e2Date.toInstant().plus(Duration.ofHours(4)));
         Date hourDate = DateUtils.buildDate(8, 0);
 
         MainFrame.setSpinnerInfo(s1Spinner,   s1Date,   Color.BLUE);
         MainFrame.setSpinnerInfo(e2Spinner,   e2Date,   Color.BLUE);
-        MainFrame.setSpinnerInfo(s2Spinner,   s2Date,   Color.GREEN);
+        MainFrame.setSpinnerInfo(s3Spinner,   s3Date,   Color.GREEN);
         MainFrame.setSpinnerInfo(hourSpinner, hourDate, Color.BLUE);
 
-        mNotificationController.updateSchedulerTimer(s2Date);
+        mNotificationController.updateSchedulerTimer(s3Date);
     }
 
     /**
@@ -159,7 +159,7 @@ public class CasesController {
      *
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   #   | Chegada | Almoço | Volta | Saída | Tempo  |             Ação              |
-     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s2)  | (hour) |   ( Calcular saída para: )    |
+     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s3)  | (hour) |   ( Calcular saída para: )    |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   2   |    1    |   0    |   0   |   0   |   1    | 1h de almoço e Xh de trabalho |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
@@ -167,7 +167,7 @@ public class CasesController {
     private void case2(ArrayList<Date> dates, ArrayList<JSpinner> spinners) {
         JSpinner s1Spinner = spinners.get(INDEX_S1);
         JSpinner e2Spinner = spinners.get(INDEX_E2);
-        JSpinner s2Spinner = spinners.get(INDEX_S2);
+        JSpinner s3Spinner = spinners.get(INDEX_S3);
 
         Date e1Date   = dates.get(INDEX_E1);
         Date hourDate = dates.get(INDEX_HOUR);
@@ -176,13 +176,13 @@ public class CasesController {
 
         Date s1Date = Date.from(e1Date.toInstant().plus(Duration.ofMinutes(halfMinWork)));
         Date e2Date = Date.from(s1Date.toInstant().plus(Duration.ofHours(1)));
-        Date s2Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(halfMinWork)));
+        Date s3Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(halfMinWork)));
 
         MainFrame.setSpinnerInfo(s1Spinner, s1Date, Color.BLUE);
         MainFrame.setSpinnerInfo(e2Spinner, e2Date, Color.BLUE);
-        MainFrame.setSpinnerInfo(s2Spinner, s2Date, Color.GREEN);
+        MainFrame.setSpinnerInfo(s3Spinner, s3Date, Color.GREEN);
 
-        mNotificationController.updateSchedulerTimer(s2Date);
+        mNotificationController.updateSchedulerTimer(s3Date);
     }
 
     /**
@@ -192,14 +192,14 @@ public class CasesController {
      *
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   #   | Chegada | Almoço | Volta | Saída | Tempo  |             Ação              |
-     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s2)  | (hour) |   ( Calcular saída para: )    |
+     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s3)  | (hour) |   ( Calcular saída para: )    |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   3   |    1    |   1    |   0   |   0   |   0    | 1h de almoço e 8h de trabalho |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      */
     private void case3(ArrayList<Date> dates, ArrayList<JSpinner> spinners) {
         JSpinner e2Spinner   = spinners.get(INDEX_E2);
-        JSpinner s2Spinner   = spinners.get(INDEX_S2);
+        JSpinner s3Spinner   = spinners.get(INDEX_S3);
         JSpinner hourSpinner = spinners.get(INDEX_HOUR);
 
         Date e1Date = dates.get(INDEX_E1);
@@ -223,13 +223,13 @@ public class CasesController {
                 hourDate);
 
         Date e2Date = Date.from(s1Date.toInstant().plus(Duration.ofHours(1)));
-        Date s2Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(missingMinutes)));
+        Date s3Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(missingMinutes)));
 
         MainFrame.setSpinnerInfo(e2Spinner,   e2Date,   Color.BLUE);
-        MainFrame.setSpinnerInfo(s2Spinner,   s2Date,   Color.GREEN);
+        MainFrame.setSpinnerInfo(s3Spinner,   s3Date,   Color.GREEN);
         MainFrame.setSpinnerInfo(hourSpinner, hourDate, Color.BLUE);
 
-        mNotificationController.updateSchedulerTimer(s2Date);
+        mNotificationController.updateSchedulerTimer(s3Date);
     }
 
     /**
@@ -239,14 +239,14 @@ public class CasesController {
      *
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   #   | Chegada | Almoço | Volta | Saída | Tempo  |             Ação              |
-     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s2)  | (hour) |   ( Calcular saída para: )    |
+     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s3)  | (hour) |   ( Calcular saída para: )    |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   4   |    1    |   1    |   0   |   0   |   1    | 1h de almoço e Xh de trabalho |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      */
     private void case4(ArrayList<Date> dates, ArrayList<JSpinner> spinners) {
         JSpinner e2Spinner = spinners.get(INDEX_E2);
-        JSpinner s2Spinner = spinners.get(INDEX_S2);
+        JSpinner s3Spinner = spinners.get(INDEX_S3);
 
         Date e1Date   = dates.get(INDEX_E1);
         Date s1Date   = dates.get(INDEX_S1);
@@ -270,12 +270,12 @@ public class CasesController {
                 hourDate);
 
         Date e2Date = Date.from(s1Date.toInstant().plus(Duration.ofHours(1)));
-        Date s2Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(missingMinutes)));
+        Date s3Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(missingMinutes)));
 
         MainFrame.setSpinnerInfo(e2Spinner, e2Date, Color.BLUE);
-        MainFrame.setSpinnerInfo(s2Spinner, s2Date, Color.GREEN);
+        MainFrame.setSpinnerInfo(s3Spinner, s3Date, Color.GREEN);
 
-        mNotificationController.updateSchedulerTimer(s2Date);
+        mNotificationController.updateSchedulerTimer(s3Date);
     }
 
     /**
@@ -285,13 +285,13 @@ public class CasesController {
      *
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   #   | Chegada | Almoço | Volta | Saída | Tempo  |             Ação              |
-     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s2)  | (hour) |   ( Calcular saída para: )    |
+     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s3)  | (hour) |   ( Calcular saída para: )    |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   5   |    1    |   1    |   1   |   0   |   0    | Xh de almoço e 8h de trabalho |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      */
     private void case5(ArrayList<Date> dates, ArrayList<JSpinner> spinners) {
-        JSpinner s2Spinner   = spinners.get(INDEX_S2);
+        JSpinner s3Spinner   = spinners.get(INDEX_S3);
         JSpinner hourSpinner = spinners.get(INDEX_HOUR);
 
         Date e1Date = dates.get(INDEX_E1);
@@ -310,12 +310,12 @@ public class CasesController {
                 Date.from(DateUtils.buildZeroDate().toInstant().plus(Duration.ofMinutes(workedMinutes))),
                 hourDate);
 
-        Date s2Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(missingMinutes)));
+        Date s3Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(missingMinutes)));
 
-        MainFrame.setSpinnerInfo(s2Spinner,   s2Date,   Color.GREEN);
+        MainFrame.setSpinnerInfo(s3Spinner,   s3Date,   Color.GREEN);
         MainFrame.setSpinnerInfo(hourSpinner, hourDate, Color.BLUE);
 
-        mNotificationController.updateSchedulerTimer(s2Date);
+        mNotificationController.updateSchedulerTimer(s3Date);
     }
 
     /**
@@ -325,13 +325,13 @@ public class CasesController {
      *
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   #   | Chegada | Almoço | Volta | Saída | Tempo  |             Ação              |
-     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s2)  | (hour) |   ( Calcular saída para: )    |
+     * |  Caso |  (e1)   |  (s1)  | (e2)  | (s3)  | (hour) |   ( Calcular saída para: )    |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      * |   6   |    1    |   1    |   1   |   0   |   1    | Xh de almoço e Xh de trabalho |
      * +-------+---------+--------+-------+-------+--------+-------------------------------+
      */
     private void case6(ArrayList<Date> dates, ArrayList<JSpinner> spinners) {
-        JSpinner s2Spinner = spinners.get(INDEX_S2);
+        JSpinner s3Spinner = spinners.get(INDEX_S3);
 
         Date e1Date   = dates.get(INDEX_E1);
         Date s1Date   = dates.get(INDEX_S1);
@@ -355,22 +355,22 @@ public class CasesController {
                 Date.from(DateUtils.buildZeroDate().toInstant().plus(Duration.ofMinutes(workedMinutes))),
                 hourDate);
 
-        Date s2Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(missingMinutes)));
-        MainFrame.setSpinnerInfo(s2Spinner, s2Date, Color.GREEN);
+        Date s3Date = Date.from(e2Date.toInstant().plus(Duration.ofMinutes(missingMinutes)));
+        MainFrame.setSpinnerInfo(s3Spinner, s3Date, Color.GREEN);
 
-        mNotificationController.updateSchedulerTimer(s2Date);
+        mNotificationController.updateSchedulerTimer(s3Date);
     }
 
     /**
      * caseTriage
-     * @param dates [e1, s1, e2, s2, hour]
+     * @param dates [e1, s1, e2, s3, hour]
      * @return Case bitmap
      */
     private static int caseTriage(ArrayList<Date> dates) {
         Date e1Date   = dates.get(INDEX_E1);
         Date s1Date   = dates.get(INDEX_S1);
         Date e2Date   = dates.get(INDEX_E2);
-        Date s2Date   = dates.get(INDEX_S2);
+        Date s3Date   = dates.get(INDEX_S3);
         Date hourDate = dates.get(INDEX_HOUR);
 
         Date zeroDate = DateUtils.buildZeroDate();
@@ -385,8 +385,8 @@ public class CasesController {
         if (!e2Date.equals(zeroDate)) {
             case_bitmap |= BITMASK_E2;
         }
-        if (!s2Date.equals(zeroDate)) {
-            case_bitmap |= BITMASK_S2;
+        if (!s3Date.equals(zeroDate)) {
+            case_bitmap |= BITMASK_S3;
         }
         if (!hourDate.equals(zeroDate)) {
             case_bitmap |= BITMASK_HOUR;
